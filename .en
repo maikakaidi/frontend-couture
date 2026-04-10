@@ -1,0 +1,8 @@
+# URL complète de ton backend en ligne (Railway)
+REACT_APP_API_BASE_URL=https://backend-couture-production.up.railway.app/api
+
+# Optionnel : timeout axios en ms (si besoin de personnaliser)
+REACT_APP_API_TIMEOUT=15000
+
+# Langue par défaut
+REACT_APP_DEFAULT_LANG=fr
