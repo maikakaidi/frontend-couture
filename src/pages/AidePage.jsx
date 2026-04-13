@@ -175,7 +175,7 @@ function AidePage() {
           fullWidth
           variant="outlined"
           color="secondary"
-          href="http://localhost:5000/docs/guide.pdf"
+          href="https://backend-couture-production.up.railway.app/docs/guide.pdf"
           target="_blank"
         >
           📖 {t("Documentation PDF", "PDF Documentation", "الوثائق PDF")}

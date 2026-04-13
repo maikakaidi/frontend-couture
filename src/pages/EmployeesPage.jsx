@@ -17,6 +17,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import jsPDF from "jspdf";
 import api from "../api";
 import { useTranslation } from "../hooks/useTranslation";
+import { useNavigate } from "react-router-dom";           // ← Ajouté ici
+import ArrowBackIcon from "@mui/icons-material/ArrowBack"; // ← Ajouté ici
 
 // 🔹 Services Offline (SQLite)
 import {
@@ -25,11 +27,12 @@ import {
   upsertEmployeeLocal,
   deleteEmployeeLocal,
 } from "../services/employeeService";
+
 import { addPendingChange } from "../services/pendingService";
-import { startAutoSync, syncAll } from "../services/syncService";
 
 function EmployeesPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();     // ← Ajouté ici
 
   const [employes, setEmployes] = useState([]);
   const [allEmployes, setAllEmployes] = useState([]);
@@ -226,12 +229,22 @@ useEffect(() => {
   };
 
 
-  return (
+return (
     <Box sx={{ p: 3 }}>
-      {/* Titre centré au milieu avec l'emoji (seul changement) */}
-      <Typography variant="h4" gutterBottom sx={{ textAlign: "center" }}>
-        👔 {t("Gestion des Employés", "Employee Management", "إدارة الموظفين")}
-      </Typography>
+      {/* ←←← Bouton retour + Titre (seule modification) */}
+      <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+        <Button
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate(-1)}   // Retour à la page précédente
+          sx={{ mr: 2 }}
+        >
+          {t("Retour", "Back", "رجوع")}
+        </Button>
+
+        <Typography variant="h4" sx={{ flex: 1, textAlign: "center" }}>
+          👔 {t("Gestion des Employés", "Employee Management", "إدارة الموظفين")}
+        </Typography>
+      </Box>
 
       {!showForm ? (
         <>
@@ -420,6 +433,8 @@ useEffect(() => {
       )}
     </Box>
   );
+
+
 }
 
 export default EmployeesPage;

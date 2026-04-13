@@ -77,7 +77,7 @@ function CommandesPage() {
   const navigate = useNavigate();
 
   const [commandes, setCommandes] = useState([]);
-  const [allCommandes, setAllCommandes] = useState([]);
+  
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState(null);
   const [notif, setNotif] = useState({ message: "", severity: "success" });
@@ -115,7 +115,7 @@ function CommandesPage() {
         });
 
         setCommandes(enriched);
-        setAllCommandes(enriched);
+       
       } catch (err) {
         const localList = await getCommandesLocal(clientId);
         const enriched = localList.map((c) => {
@@ -124,7 +124,7 @@ function CommandesPage() {
           return c;
         });
         setCommandes(enriched);
-        setAllCommandes(enriched);
+        
       }
 
       const savedClient = localStorage.getItem(`client_${clientId}`);
@@ -209,7 +209,7 @@ function CommandesPage() {
       await upsertCommandeLocal(commande);
 
       setCommandes((prev) => (editId ? prev.map((c) => (c._id === editId ? commande : c)) : [commande, ...prev]));
-      setAllCommandes((prev) => (editId ? prev.map((c) => (c._id === editId ? commande : c)) : [commande, ...prev]));
+     
 
       setNotif({ message: t("Commande enregistrée", "Order saved", "تم حفظ الطلب"), severity: "success" });
       resetForm();
@@ -241,7 +241,7 @@ function CommandesPage() {
       const commandeWithImage = { ...commandeToSave, preview: currentCommande.preview };
 
       setCommandes((prev) => (editId ? prev.map((c) => (c._id === editId ? commandeWithImage : c)) : [commandeWithImage, ...prev]));
-      setAllCommandes((prev) => (editId ? prev.map((c) => (c._id === editId ? commandeWithImage : c)) : [commandeWithImage, ...prev]));
+      
 
       setNotif({ message: "📴 Commande enregistrée hors connexion", severity: "warning" });
       resetForm();
@@ -265,17 +265,13 @@ function CommandesPage() {
     } finally {
       removeImageBase64(id);
       setCommandes((prev) => prev.filter((c) => c._id !== id));
-      setAllCommandes((prev) => prev.filter((c) => c._id !== id));
+      setCommandes((prev) => prev.filter((c) => c._id !== id));
       setDeleteDialog({ open: false, id: null });
       setNotif({ message: t("Commande supprimée", "Order deleted", "تم حذف الطلب"), severity: "success" });
     }
   };
 
-  const getCommandeImage = (c) => {
-    if (c.preview) return c.preview;
-    if (c.image && typeof c.image === "string") return getImageUrl(c.image);
-    return null;
-  };
+
 
   return (
     <Box sx={{ p: 3, position: "relative" }}>
@@ -326,7 +322,7 @@ function CommandesPage() {
                 </Box>
               ) : c.image && typeof c.image === "string" ? (
                 <Box sx={{ mt: 2, mb: 2 }}>
-                  <img src={getImageUrl(c.image)} alt="Image commande" style={{ width: "25%", maxHeight: "90px", objectFit: "cover", borderRadius: 12 }} />
+                  <img src={getImageUrl(c.image)} alt="Commande" style={{ width: "25%", maxHeight: "90px", objectFit: "cover", borderRadius: 12 }} />
                 </Box>
               ) : (
                 <Typography color="text.secondary">📸 Image enregistrée (visible une fois en ligne)</Typography>

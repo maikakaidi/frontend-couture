@@ -23,7 +23,7 @@ import { useNavigate } from "react-router-dom";
 
 // 🔥 Nouveau système offline
 import { addPendingChange } from "../services/pendingService";
-import { startAutoSync, syncAll } from "../services/syncService";
+import {  syncAll } from "../services/syncService";
 
 // 🔹 Services Galerie (SQLite + backend)
 import {
@@ -61,7 +61,7 @@ function GaleriePage() {
       const localData = await getGalerieLocal(cat);
       setImages(localData);
     }
-  }, [categorie]);
+  }, []);
 
   useEffect(() => {
     fetchImages();

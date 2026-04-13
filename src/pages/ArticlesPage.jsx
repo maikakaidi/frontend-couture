@@ -18,14 +18,13 @@ import { useNavigate } from "react-router-dom";
 
 /* 🔥 Nouveau système offline */
 import { addPendingChange } from "../services/pendingService";
-import { startAutoSync, syncAll } from "../services/syncService";
+import {  syncAll } from "../services/syncService";
 
 /* Services Articles (SQLite + backend) */
 import {
   getArticlesLocal,
   fullSyncArticles,
-  upsertArticleLocal,
-  deleteArticleLocal,
+  
 } from "../services/articleService";
 
 function ArticlesPage() {

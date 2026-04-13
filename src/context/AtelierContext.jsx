@@ -12,7 +12,7 @@ export function AtelierProvider({ children }) {
 
   // Charger les paramètres une seule fois au démarrage
   useEffect(() => {
-    axios.get("http://localhost:5000/api/settings")
+    axios.get("https://backend-couture-production.up.railway.app/api/settings")
       .then(res => setAtelier(res.data))
       .catch(err => console.error("❌ Erreur chargement settings:", err));
   }, []);

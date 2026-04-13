@@ -1,28 +1,8 @@
 {
-    "name": "Couture VIP",
-    "short_name": "CoutureVIP",
-    "description": "Application premium de gestion d'atelier de couture",
-    "lang": "fr",
-    "start_url": ".",
-    "display": "standalone",
-    "orientation": "portrait",
-    "background_color": "#000000",
-    "theme_color": "#D4AF37",
-    "icons": [
-        {
-            "src": "icon-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "icon-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-        },
-        {
-            "src": "icon-1024x1024.png",
-            "sizes": "1024x1024",
-            "type": "image/png"
-        }
-    ]
+  "short_name": "CoutureVIP",
+  "name": "Couture VIP",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
 }

@@ -1,6 +1,8 @@
 {
   "name": "frontend",
   "version": "0.1.0",
+  "homepage": ".",
+
   "private": true,
   "dependencies": {
     "@capacitor-community/sqlite": "^8.0.1",
@@ -23,6 +25,7 @@
     "axios": "^1.13.5",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.19",
+    "express": "^4.22.1",
     "jeep-sqlite": "^2.5.6",
     "jspdf": "^4.1.0",
     "jspdf-autotable": "^5.0.7",
@@ -39,11 +42,12 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "node server.js",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
+  "start": "node server.js",
+  "build": "react-scripts build",
+  "serve": "node server.js",
+  "test": "react-scripts test",
+  "eject": "react-scripts eject"
+},
   "eslintConfig": {
     "extends": [
       "react-app",
