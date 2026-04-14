@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -22,32 +22,32 @@ import GroupIcon from "@mui/icons-material/Group";
 import SettingsIcon from "@mui/icons-material/Settings";
 import HelpIcon from "@mui/icons-material/Help";
 
-// Services
 import { startAutoSync, syncAll, syncPendingChanges } from "./services/syncService";
 import { initDB } from "./services/db";
 import { useTranslation } from "./hooks/useTranslation";
 
-// ====================== IMPORTS DIRECTS (Pages critiques) ======================
+// ====================== PAGES DIRECTES (IMPORTANT - PAS DE LAZY) ======================
 import SplashScreen from "./pages/SplashScreen";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+
 import EmployeesPage from "./pages/EmployeesPage";
 import CommandesPage from "./pages/CommandesPage";
 import ClientMesuresPage from "./pages/ClientMesuresPage";
 import AdminParametresPage from "./pages/AdminParametresPage";
 
-// ====================== LAZY LOADING (Pages non critiques) ======================
-const AccueilPage = React.lazy(() => import("./pages/AccueilPage"));
-const ClientsPage = React.lazy(() => import("./pages/ClientsPage"));
-const ArticlesPage = React.lazy(() => import("./pages/ArticlesPage"));
-const ParametresPage = React.lazy(() => import("./pages/ParametresPage"));
-const FinancesPage = React.lazy(() => import("./pages/FinancesPage"));
-const AbonnementPage = React.lazy(() => import("./pages/AbonnementPage"));
-const GaleriePage = React.lazy(() => import("./pages/GaleriePage"));
-const AidePage = React.lazy(() => import("./pages/AidePage"));
-const VentesPage = React.lazy(() => import("./pages/VentesPage"));
-const DepensesPage = React.lazy(() => import("./pages/DepensesPage"));
-const DashboardAdmin = React.lazy(() => import("./pages/DashboardAdmin"));
+// ====================== LAZY (PAGES NON CRITIQUES) ======================
+const AccueilPage = lazy(() => import("./pages/AccueilPage"));
+const ClientsPage = lazy(() => import("./pages/ClientsPage"));
+const ArticlesPage = lazy(() => import("./pages/ArticlesPage"));
+const ParametresPage = lazy(() => import("./pages/ParametresPage"));
+const FinancesPage = lazy(() => import("./pages/FinancesPage"));
+const AbonnementPage = lazy(() => import("./pages/AbonnementPage"));
+const GaleriePage = lazy(() => import("./pages/GaleriePage"));
+const AidePage = lazy(() => import("./pages/AidePage"));
+const VentesPage = lazy(() => import("./pages/VentesPage"));
+const DepensesPage = lazy(() => import("./pages/DepensesPage"));
+const DashboardAdmin = lazy(() => import("./pages/DashboardAdmin"));
 
 // ====================== GUARDS ======================
 function PrivateSuperAdminRoute({ children, role }) {
@@ -64,7 +64,14 @@ function PrivateUserRoute({ children, role }) {
 
 // ====================== LOADER ======================
 const PageLoader = () => (
-  <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "80vh" }}>
+  <Box
+    sx={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      minHeight: "80vh",
+    }}
+  >
     <CircularProgress />
   </Box>
 );
@@ -78,7 +85,7 @@ function AppContent() {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [value, setValue] = useState(0);
 
-  // Initialisation DB
+  // DB init
   useEffect(() => {
     const startDB = async () => {
       await initDB();
@@ -87,13 +94,13 @@ function AppContent() {
     startDB();
   }, []);
 
-  // Sync automatique
+  // Sync auto
   useEffect(() => {
     startAutoSync();
     syncAll();
   }, []);
 
-  // Écoute du storage
+  // Storage listener
   useEffect(() => {
     const handleStorage = () => {
       setRole(localStorage.getItem("role"));
@@ -103,7 +110,7 @@ function AppContent() {
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
-  // Gestion du retour en ligne
+  // Online sync
   useEffect(() => {
     const handleOnline = () => {
       console.log("🌐 Internet revenu → synchronisation");
@@ -115,14 +122,14 @@ function AppContent() {
 
   return (
     <>
-      {/* Suspense global pour éviter les pages blanches */}
+      {/* 🔥 GLOBAL SUSPENSE (ANTI PAGE BLANCHE) */}
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<SplashScreen />} />
           <Route path="/login" element={<LoginPage setRole={setRole} setToken={setToken} />} />
           <Route path="/register" element={<RegisterPage />} />
 
-          {/* Routes Utilisateur */}
+          {/* USER */}
           <Route path="/accueil" element={<PrivateUserRoute role={role}><AccueilPage /></PrivateUserRoute>} />
           <Route path="/employes" element={<PrivateUserRoute role={role}><EmployeesPage /></PrivateUserRoute>} />
           <Route path="/clients" element={<PrivateUserRoute role={role}><ClientsPage /></PrivateUserRoute>} />
@@ -138,13 +145,13 @@ function AppContent() {
           <Route path="/galerie" element={<PrivateUserRoute role={role}><GaleriePage /></PrivateUserRoute>} />
           <Route path="/aide" element={<PrivateUserRoute role={role}><AidePage /></PrivateUserRoute>} />
 
-          {/* Routes Super Admin */}
+          {/* ADMIN */}
           <Route path="/dashboard-admin" element={<PrivateSuperAdminRoute role={role}><DashboardAdmin /></PrivateSuperAdminRoute>} />
           <Route path="/admin/parametres" element={<PrivateSuperAdminRoute role={role}><AdminParametresPage /></PrivateSuperAdminRoute>} />
         </Routes>
       </Suspense>
 
-      {/* Navigation Utilisateur */}
+      {/* NAV USER */}
       {token && role && ["user", "soususer", "adminatelier"].includes(role) && !publicPaths.includes(location.pathname) && (
         <Paper sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 1200 }} elevation={3}>
           <BottomNavigation value={value} onChange={(e, newValue) => setValue(newValue)} showLabels>
@@ -157,7 +164,7 @@ function AppContent() {
         </Paper>
       )}
 
-      {/* Navigation Super Admin */}
+      {/* NAV ADMIN */}
       {token && role === "superadmin" && !publicPaths.includes(location.pathname) && (
         <Paper sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 1200 }} elevation={3}>
           <BottomNavigation value={value} onChange={(e, newValue) => setValue(newValue)} showLabels>
