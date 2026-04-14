@@ -123,7 +123,7 @@ function ClientMesuresPage() {
       await addPendingChange(
         "mesures",
         editId ? "PUT" : "POST",
-        editId ? `/mesures/( {editId}` : `/mesures/ ){clientId}`,
+       editId ? `/mesures/${editId}` : `/mesures/${clientId}`,
         mesureToSave
       );
 

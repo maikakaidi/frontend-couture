@@ -105,7 +105,7 @@ function AdminParametresPage() {
           {imagesDefilantes.map((img, index) => (
             <Paper key={index} sx={{ p: 1, mb: 2, display: "flex", alignItems: "center", gap: 2 }}>
               <img
-                src={`( {API_BASE_URL}/ ){img}`}
+               src={`${API_BASE_URL}/${img}`}
                 alt={t("Image promotionnelle", "Promotional image", "صورة ترويجية")}
                 style={{
                   width: "15%",
