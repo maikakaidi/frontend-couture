@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -12,8 +12,7 @@ import {
   BottomNavigation,
   BottomNavigationAction,
   Paper,
-  CircularProgress,
-  Box,
+ 
 } from "@mui/material";
 
 import HomeIcon from "@mui/icons-material/Home";
@@ -26,28 +25,25 @@ import { startAutoSync, syncAll, syncPendingChanges } from "./services/syncServi
 import { initDB } from "./services/db";
 import { useTranslation } from "./hooks/useTranslation";
 
-// ====================== PAGES DIRECTES (IMPORTANT - PAS DE LAZY) ======================
+// ====================== IMPORTS DIRECTS (TOUT EN DIRECT - PLUS DE LAZY) ======================
 import SplashScreen from "./pages/SplashScreen";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-
+import AccueilPage from "./pages/AccueilPage";
 import EmployeesPage from "./pages/EmployeesPage";
+import ClientsPage from "./pages/ClientsPage";
 import CommandesPage from "./pages/CommandesPage";
+import ArticlesPage from "./pages/ArticlesPage";
 import ClientMesuresPage from "./pages/ClientMesuresPage";
+import ParametresPage from "./pages/ParametresPage";
+import FinancesPage from "./pages/FinancesPage";
+import AbonnementPage from "./pages/AbonnementPage";
+import GaleriePage from "./pages/GaleriePage";
+import AidePage from "./pages/AidePage";
+import VentesPage from "./pages/VentesPage";
+import DepensesPage from "./pages/DepensesPage";
+import DashboardAdmin from "./pages/DashboardAdmin";
 import AdminParametresPage from "./pages/AdminParametresPage";
-
-// ====================== LAZY (PAGES NON CRITIQUES) ======================
-const AccueilPage = lazy(() => import("./pages/AccueilPage"));
-const ClientsPage = lazy(() => import("./pages/ClientsPage"));
-const ArticlesPage = lazy(() => import("./pages/ArticlesPage"));
-const ParametresPage = lazy(() => import("./pages/ParametresPage"));
-const FinancesPage = lazy(() => import("./pages/FinancesPage"));
-const AbonnementPage = lazy(() => import("./pages/AbonnementPage"));
-const GaleriePage = lazy(() => import("./pages/GaleriePage"));
-const AidePage = lazy(() => import("./pages/AidePage"));
-const VentesPage = lazy(() => import("./pages/VentesPage"));
-const DepensesPage = lazy(() => import("./pages/DepensesPage"));
-const DashboardAdmin = lazy(() => import("./pages/DashboardAdmin"));
 
 // ====================== GUARDS ======================
 function PrivateSuperAdminRoute({ children, role }) {
@@ -62,20 +58,6 @@ function PrivateUserRoute({ children, role }) {
   return children;
 }
 
-// ====================== LOADER ======================
-const PageLoader = () => (
-  <Box
-    sx={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      minHeight: "80vh",
-    }}
-  >
-    <CircularProgress />
-  </Box>
-);
-
 function AppContent() {
   const { t } = useTranslation();
   const location = useLocation();
@@ -85,7 +67,7 @@ function AppContent() {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [value, setValue] = useState(0);
 
-  // DB init
+  // Initialisation DB + Sync
   useEffect(() => {
     const startDB = async () => {
       await initDB();
@@ -94,13 +76,11 @@ function AppContent() {
     startDB();
   }, []);
 
-  // Sync auto
   useEffect(() => {
     startAutoSync();
     syncAll();
   }, []);
 
-  // Storage listener
   useEffect(() => {
     const handleStorage = () => {
       setRole(localStorage.getItem("role"));
@@ -110,7 +90,6 @@ function AppContent() {
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
-  // Online sync
   useEffect(() => {
     const handleOnline = () => {
       console.log("🌐 Internet revenu → synchronisation");
@@ -122,36 +101,33 @@ function AppContent() {
 
   return (
     <>
-      {/* 🔥 GLOBAL SUSPENSE (ANTI PAGE BLANCHE) */}
-      <Suspense fallback={<PageLoader />}>
-        <Routes>
-          <Route path="/" element={<SplashScreen />} />
-          <Route path="/login" element={<LoginPage setRole={setRole} setToken={setToken} />} />
-          <Route path="/register" element={<RegisterPage />} />
+      <Routes>
+        <Route path="/" element={<SplashScreen />} />
+        <Route path="/login" element={<LoginPage setRole={setRole} setToken={setToken} />} />
+        <Route path="/register" element={<RegisterPage />} />
 
-          {/* USER */}
-          <Route path="/accueil" element={<PrivateUserRoute role={role}><AccueilPage /></PrivateUserRoute>} />
-          <Route path="/employes" element={<PrivateUserRoute role={role}><EmployeesPage /></PrivateUserRoute>} />
-          <Route path="/clients" element={<PrivateUserRoute role={role}><ClientsPage /></PrivateUserRoute>} />
-          <Route path="/clients/:clientId/mesures" element={<PrivateUserRoute role={role}><ClientMesuresPage /></PrivateUserRoute>} />
-          <Route path="/commandes" element={<PrivateUserRoute role={role}><CommandesPage /></PrivateUserRoute>} />
-          <Route path="/commandes/:clientId" element={<PrivateUserRoute role={role}><CommandesPage /></PrivateUserRoute>} />
-          <Route path="/articles" element={<PrivateUserRoute role={role}><ArticlesPage /></PrivateUserRoute>} />
-          <Route path="/ventes" element={<PrivateUserRoute role={role}><VentesPage /></PrivateUserRoute>} />
-          <Route path="/depenses" element={<PrivateUserRoute role={role}><DepensesPage /></PrivateUserRoute>} />
-          <Route path="/parametres" element={<PrivateUserRoute role={role}><ParametresPage /></PrivateUserRoute>} />
-          <Route path="/finances" element={<PrivateUserRoute role={role}><FinancesPage /></PrivateUserRoute>} />
-          <Route path="/abonnement" element={<PrivateUserRoute role={role}><AbonnementPage /></PrivateUserRoute>} />
-          <Route path="/galerie" element={<PrivateUserRoute role={role}><GaleriePage /></PrivateUserRoute>} />
-          <Route path="/aide" element={<PrivateUserRoute role={role}><AidePage /></PrivateUserRoute>} />
+        {/* USER ROUTES */}
+        <Route path="/accueil" element={<PrivateUserRoute role={role}><AccueilPage /></PrivateUserRoute>} />
+        <Route path="/employes" element={<PrivateUserRoute role={role}><EmployeesPage /></PrivateUserRoute>} />
+        <Route path="/clients" element={<PrivateUserRoute role={role}><ClientsPage /></PrivateUserRoute>} />
+        <Route path="/clients/:clientId/mesures" element={<PrivateUserRoute role={role}><ClientMesuresPage /></PrivateUserRoute>} />
+        <Route path="/commandes" element={<PrivateUserRoute role={role}><CommandesPage /></PrivateUserRoute>} />
+        <Route path="/commandes/:clientId" element={<PrivateUserRoute role={role}><CommandesPage /></PrivateUserRoute>} />
+        <Route path="/articles" element={<PrivateUserRoute role={role}><ArticlesPage /></PrivateUserRoute>} />
+        <Route path="/ventes" element={<PrivateUserRoute role={role}><VentesPage /></PrivateUserRoute>} />
+        <Route path="/depenses" element={<PrivateUserRoute role={role}><DepensesPage /></PrivateUserRoute>} />
+        <Route path="/parametres" element={<PrivateUserRoute role={role}><ParametresPage /></PrivateUserRoute>} />
+        <Route path="/finances" element={<PrivateUserRoute role={role}><FinancesPage /></PrivateUserRoute>} />
+        <Route path="/abonnement" element={<PrivateUserRoute role={role}><AbonnementPage /></PrivateUserRoute>} />
+        <Route path="/galerie" element={<PrivateUserRoute role={role}><GaleriePage /></PrivateUserRoute>} />
+        <Route path="/aide" element={<PrivateUserRoute role={role}><AidePage /></PrivateUserRoute>} />
 
-          {/* ADMIN */}
-          <Route path="/dashboard-admin" element={<PrivateSuperAdminRoute role={role}><DashboardAdmin /></PrivateSuperAdminRoute>} />
-          <Route path="/admin/parametres" element={<PrivateSuperAdminRoute role={role}><AdminParametresPage /></PrivateSuperAdminRoute>} />
-        </Routes>
-      </Suspense>
+        {/* SUPER ADMIN ROUTES */}
+        <Route path="/dashboard-admin" element={<PrivateSuperAdminRoute role={role}><DashboardAdmin /></PrivateSuperAdminRoute>} />
+        <Route path="/admin/parametres" element={<PrivateSuperAdminRoute role={role}><AdminParametresPage /></PrivateSuperAdminRoute>} />
+      </Routes>
 
-      {/* NAV USER */}
+      {/* Navigation USER */}
       {token && role && ["user", "soususer", "adminatelier"].includes(role) && !publicPaths.includes(location.pathname) && (
         <Paper sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 1200 }} elevation={3}>
           <BottomNavigation value={value} onChange={(e, newValue) => setValue(newValue)} showLabels>
@@ -164,7 +140,7 @@ function AppContent() {
         </Paper>
       )}
 
-      {/* NAV ADMIN */}
+      {/* Navigation SUPER ADMIN */}
       {token && role === "superadmin" && !publicPaths.includes(location.pathname) && (
         <Paper sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 1200 }} elevation={3}>
           <BottomNavigation value={value} onChange={(e, newValue) => setValue(newValue)} showLabels>
