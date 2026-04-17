@@ -178,6 +178,16 @@ function CommandesPage() {
         {t("Commandes", "Orders", "الطلبات")}
       </Typography>
 
+            {/* Bouton Retour - Ajouté ici */}
+      <Button 
+        variant="outlined" 
+        onClick={() => window.history.back()}
+        sx={{ mb: 3, mr: 2 }}
+      >
+        ← {t("Retour", "Back", "رجوع")}
+      </Button>
+
+
       {!showForm && !isSousUser && (
         <Button variant="contained" sx={{ mb: 3 }} onClick={() => setShowForm(true)}>
           + {t("Nouvelle commande", "New order", "طلب جديد")}
