@@ -31,8 +31,8 @@ function AbonnementPage() {
   const plans = [
     { id: "essai", label: t("Essai", "Trial", "تجربة"), prix: t("Gratuit", "Free", "مجاني"), desc: t("7 jours gratuits", "7 days free", "7 أيام مجانية") },
     { id: "3mois", label: t("3 mois", "3 months", "3 أشهر"), prix: "20 000 FCFA", desc: t("Abonnement trimestriel", "Quarterly subscription", "اشتراك ربع سنوي") },
-    { id: "6mois", label: t("6 mois", "6 months", "6 أشهر"), prix: "40 000 FCFA", desc: t("Abonnement semestriel", "Semi-annual subscription", "اشتراك نصف سنوي") },
-    { id: "1an", label: t("1 an", "1 year", "سنة واحدة"), prix: "60 000 FCFA", desc: t("Abonnement annuel", "Annual subscription", "اشتراك سنوي") },
+    { id: "6mois", label: t("6 mois", "6 months", "6 أشهر"), prix: "30 000 FCFA", desc: t("Abonnement semestriel", "Semi-annual subscription", "اشتراك نصف سنوي") },
+    { id: "1an", label: t("1 an", "1 year", "سنة واحدة"), prix: "40 000 FCFA", desc: t("Abonnement annuel", "Annual subscription", "اشتراك سنوي") },
   ];
 
   const contacts = {
